@@ -17,6 +17,7 @@ then echo "$DATE: $SERVICE service running, everything is fine"
 #subject="TEST: $SERVICE ON RUBY APP SERVER IS RUNNING!"
 #echo "$SERVICE is running fine on ruby server, this is a test mail regarding monitoring script with email notificaitons." | mail -s "$subject" $email
 else echo "$DATE: $SERVICE is not running starting it for you"
+gzip -c /var/log/$SERVICE/$SERVICE.log > /opt/$SERVICE-log-`date '+%Y_%m_%d_:_%H_%M_%S'`.gz
 subject="URGENT: $SERVICE ON RUBY APP SERVER HAS STOPPED, WILL START IT AGAIN!"
 echo "$SERVICE at ruby app server wasn't running and has been started" | mail -s "$subject" $email
 sudo /etc/init.d/$SERVICE start
