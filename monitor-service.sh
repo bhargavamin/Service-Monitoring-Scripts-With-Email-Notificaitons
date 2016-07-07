@@ -22,6 +22,8 @@ subject="URGENT: $SERVICE ON RUBY APP SERVER HAS STOPPED, WILL START IT AGAIN!"
 echo "$SERVICE at ruby app server wasn't running and has been started" | mail -s "$subject" $email
 sudo /etc/init.d/$SERVICE start
 fi
+# Optional : If you want to attach a log file with email notification then make changes as following :
+# mail -s "$subject" -a "<logfile location>" -c <cc_email_ids> $email
 
 #Run the script manually
 
