@@ -1,0 +1,21 @@
+#! /bin/bash
+CHECK=$0
+SERVICE="tomcat"
+NOW=$(date '+%Y-%m-%d')
+email=<email>
+DATE=`date`
+OUTPUT=$(ps aux | grep -v grep | grep -v $CHECK |grep $SERVICE)
+echo $OUTPUT
+if [ "${#OUTPUT}" -gt 0 ] ;
+then echo "$DATE: $SERVICE service running, everything is fine"
+#subject="TEST: $SERVICE ON APP SERVER IS RUNNING!"
+#echo "$SERVICE is running fine on ruby server, this is a test mail regarding monitoring script with email notificaitons." | \
+mail -s "$subject" -a "/usr/share/tomcat/apache-tomcat-8.0.36/logs/catalina.$NOW.log" -c <cc-email-id> $email
+else echo "$DATE: $SERVICE is not running starting it for you"
+#gzip -c /var/log/$SERVICE/$SERVICE.log > /opt/$SERVICE-log-`date '+%Y_%m_%d_:_%H_%M_%S'`.gz
+subject="URGENT: $SERVICE ON APP SERVER HAS STOPPED, WILL START IT AGAIN!"
+echo "$SERVICE at APP server wasn't running and has been started. Please find the latest log file as an attachment with this mail." | \
+mail -s "$subject" -a "/usr/share/tomcat/apache-tomcat-8.0.36/logs/catalina.$NOW.log" \
+-c <cc-email-ids>  $email
+sudo /etc/init.d/$SERVICE start
+fi
